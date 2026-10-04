@@ -37,3 +37,28 @@
   newWork.addEventListener('input', () => { oldWork.value = newWork.value; update(); });
 })();
 </script>
+
+<script>
+(() => {
+  const chart = document.querySelector('.chart');
+  const label = text => [...chart.querySelectorAll('text')].find(node => node.textContent.trim() === text);
+  const fields = document.querySelector('.timeline-fields');
+  const current = fields.querySelector('[data-row="current-age"]');
+  const retire = fields.querySelector('[data-row="retire-age"]');
+  const work = fields.querySelector('[data-row="new-work-years"]');
+  const retired = fields.querySelector('[data-row="retire-years"]');
+  const life = fields.querySelector('[data-row="life-age"]');
+  const oldWork = document.querySelector('[data-row="work-years"]');
+  function value(input) { return Math.max(0, Number(input.value) || 0); }
+  function render() {
+    label('現在年齡').textContent = '現在年齡（' + value(current) + '）歲';
+    label('退休年齡').textContent = '退休年齡（' + value(retire) + '）歲';
+    label('工作期間').textContent = '工作期間共（' + value(work) + '）年';
+    label('退休生活').textContent = '退休生活共（' + value(retired) + '）年';
+    label('預估壽命').textContent = '預估壽命（' + value(life) + '）歲';
+  }
+  [current, retire, work, retired, life].forEach(input => input.addEventListener('input', render));
+  oldWork.addEventListener('input', () => { work.value = oldWork.value; render(); });
+  render();
+})();
+</script>
