@@ -62,3 +62,21 @@
   render();
 })();
 </script>
+
+<script>
+(() => {
+  const chart = document.querySelector('.chart');
+  const get = name => [...chart.querySelectorAll('text')].find(node => node.textContent.trim().startsWith(name));
+  const fields = document.querySelector('.timeline-fields');
+  const pairs = [
+    ['現在年齡', 'current-age', '歲'], ['退休年齡', 'retire-age', '歲'],
+    ['工作期間', 'new-work-years', '年'], ['退休生活', 'retire-years', '年'], ['預估壽命', 'life-age', '歲']
+  ];
+  const redraw = () => pairs.forEach(([name, row, unit]) => {
+    const value = Math.max(0, Number(fields.querySelector('[data-row="' + row + '"]').value) || 0);
+    get(name).textContent = (name === '工作期間' || name === '退休生活' ? name + '共（' : name + '（') + value + '）' + unit;
+  });
+  fields.querySelectorAll('input').forEach(input => input.addEventListener('input', redraw));
+  redraw();
+})();
+</script>
