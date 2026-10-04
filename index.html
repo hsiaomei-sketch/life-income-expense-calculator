@@ -20,3 +20,20 @@
 <footer class="credit">教材作者／原始設計：<strong>樂予學院 黃昱仁執行長</strong><br>網頁版整理：依原始教材之人生收支曲線概念重製；請於使用、修改或再發布前確認授權範圍。</footer></main>
 <script>const n=k=>Math.max(0,Number(document.querySelector('[data-row="'+k+'"]').value)||0),fmt=v=>new Intl.NumberFormat('zh-TW',{maximumFractionDigits:2}).format(v)+' 萬元';function update(){const v={living:n('living')*12*n('living-years'),education:n('edu')*n('edu-years')*n('children'),house:n('house')*n('houses'),car:n('car')*n('cars'),travel:n('travel')*n('trips')*n('travel-years'),final:n('final')};Object.entries(v).forEach(([k,x])=>document.querySelector('[data-output="'+k+'"]').textContent=fmt(x));const t=Object.values(v).reduce((s,x)=>s+x,0),w=n('work-years');document.querySelector('#total').textContent=fmt(t);document.querySelector('#salary').textContent=w?fmt(t)+' ÷ '+w+' 年 ÷ 12 個月 ＝ '+fmt(t/w/12)+'／月':'請填入工作期間，才能計算所需月薪。'}document.querySelectorAll('input').forEach(i=>i.addEventListener('input',update));update();</script>
 </body></html>
+
+<script>
+(() => {
+  const chart = document.querySelector('.chart');
+  chart.querySelectorAll('text').forEach(t => {
+    t.textContent = t.textContent.replace('（　）歲','').replace('共（　）年','');
+  });
+  const fields = document.createElement('section');
+  fields.className = 'timeline-fields';
+  fields.setAttribute('aria-label','人生時間設定');
+  fields.innerHTML = '<style>.timeline-fields{display:grid;grid-template-columns:repeat(5,1fr);gap:10px;margin:14px 0 20px}.timeline-fields label{background:#f3f4f2;padding:10px;font-weight:500}.timeline-fields input{display:block;width:100%;margin-top:5px}@media(max-width:620px){.timeline-fields{grid-template-columns:1fr 1fr}}</style><label>現在年齡（歲）<input class="field wide" type="number" min="0" data-row="current-age" value="0"></label><label>退休年齡（歲）<input class="field wide" type="number" min="0" data-row="retire-age" value="0"></label><label>工作期間（年）<input class="field wide" type="number" min="0" data-row="new-work-years" value="0"></label><label>退休生活（年）<input class="field wide" type="number" min="0" data-row="retire-years" value="0"></label><label>預估壽命（歲）<input class="field wide" type="number" min="0" data-row="life-age" value="0"></label>';
+  chart.insertAdjacentElement('afterend', fields);
+  const oldWork = document.querySelector('[data-row="work-years"]');
+  const newWork = fields.querySelector('[data-row="new-work-years"]');
+  newWork.addEventListener('input', () => { oldWork.value = newWork.value; update(); });
+})();
+</script>
